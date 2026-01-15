@@ -6,7 +6,7 @@
 
 ## Add project to GitHub Account
 
-Step 1️⃣ Go to your project root
+# Step 1️⃣ Go to your project root
     > cd D:\FlutterSDK\Development\FlutterDemo\flutter_application_1
 
 Step 2️⃣ Initialize a new Git repository
