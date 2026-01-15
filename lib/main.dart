@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'core/routing/app_routes.dart';
+// import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() {
+  // Load environment variables
+  //await dotenv.load(fileName: ".env");
+
   runApp(const MyApp());
 }
 

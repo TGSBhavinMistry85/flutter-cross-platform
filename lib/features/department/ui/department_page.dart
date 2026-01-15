@@ -1,7 +1,21 @@
 import 'package:flutter/material.dart';
 
-class DepartmentPage extends StatelessWidget {
+import 'package:flutter_application_1/features/department/logic/department_controller.dart';
+import 'package:flutter_application_1/shared/widgets/statistics_tiles.dart';
+
+class DepartmentPage extends StatefulWidget {
   const DepartmentPage({super.key});
+
+  @override
+  State<DepartmentPage> createState() => _DepartmentPageState();
+}
+
+class _DepartmentPageState extends State<DepartmentPage> {
+   @override
+  void initState() {
+    super.initState();
+    DepartmentController.loadStats();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +31,51 @@ class DepartmentPage extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
+
+          /// =======================
+          /// DASHBOARD TILES (FIXED)
+          /// =======================
+          SizedBox(
+            width: double.infinity,
+            child: ValueListenableBuilder(
+              valueListenable: DepartmentController.departmentStats,
+              builder: (_, deptStats, __) {
+                return StatisticsTiles(
+                  tiles: [
+                    StatsTileModel(
+                      title: 'Total Departments',
+                      value: deptStats.total,
+                      icon: Icons.apartment,
+                      color: Colors.orange,
+                      sequenceOrder: 1,
+                    ),
+                    StatsTileModel(
+                      title: 'Active Departments',
+                      value: deptStats.active,
+                      icon: Icons.check_circle,
+                      color: Colors.green,
+                      sequenceOrder: 2,
+                    ),
+                    StatsTileModel(
+                      title: 'Inactive Departments',
+                      value: deptStats.inactive,
+                      icon: Icons.cancel,
+                      color: Colors.blue,
+                      sequenceOrder: 3,
+                    ),
+                    StatsTileModel(
+                      title: 'Deleted Departments',
+                      value: deptStats.deleted,
+                      icon: Icons.highlight_off,
+                      color: Colors.redAccent,
+                      sequenceOrder: 4,
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+
           const SizedBox(height: 16),
 
           // Toolbar
