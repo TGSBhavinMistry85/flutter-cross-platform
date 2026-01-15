@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../shell/logic/main_content_controller.dart';
 import '../logic/employee_controller.dart';
 import '../model/employee_list_model.dart';
 import 'manage_employee_page.dart';
@@ -30,12 +31,8 @@ class EmployeePage extends StatelessWidget {
             children: [
               ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) =>
-                          const ManageEmployeePage(isEditMode: false),
-                    ),
+                  MainContentController.open(
+                    ManageEmployeePage(isEditMode: false),
                   );
                 },
                 icon: const Icon(Icons.person_add),
@@ -87,13 +84,10 @@ class EmployeePage extends StatelessWidget {
                               IconButton(
                                 icon: const Icon(Icons.edit, size: 18),
                                 onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => ManageEmployeePage(
-                                        isEditMode: true,
-                                        employeeId: employee.employeeId,
-                                      ),
+                                  MainContentController.open(
+                                    ManageEmployeePage(
+                                      isEditMode: true,
+                                      employeeId: employee.employeeId,
                                     ),
                                   );
                                 },
@@ -109,16 +103,20 @@ class EmployeePage extends StatelessWidget {
                                   final confirmed = await ConfirmDialog.show(
                                     context: context,
                                     title: 'Delete Employee',
-                                    message: 'Are you sure you want to delete ${employee.firstName} ${employee.lastName}?',
+                                    message:
+                                        'Are you sure you want to delete ${employee.firstName} ${employee.lastName}?',
                                     confirmText: 'Delete',
                                   );
 
                                   if (confirmed == true) {
                                     // SOFT DELETE LOGIC (later API)
-                                    debugPrint('Soft deleted employee ${employee.employeeId}',);
+                                    debugPrint(
+                                      'Soft deleted employee ${employee.employeeId}',
+                                    );
                                     AppSnackBar.show(
                                       context,
-                                      message:'Employee ${employee.firstName} ${employee.lastName} deleted successfully',
+                                      message:
+                                          'Employee ${employee.firstName} ${employee.lastName} deleted successfully',
                                       type: SnackBarType.success,
                                     );
                                   }

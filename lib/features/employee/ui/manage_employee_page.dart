@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+
+import '../../shell/logic/main_content_controller.dart';
 import '../logic/mangeEmployee_controller.dart';
 import '../model/employee_model.dart';
+
+import 'package:flutter_application_1/features/employee/ui/employee_page.dart';
+import 'package:flutter_application_1/shared/widgets/app_snackbar.dart';
 
 class ManageEmployeePage extends StatefulWidget {
   final bool isEditMode;
@@ -52,13 +57,19 @@ class _ManageEmployeePageState extends State<ManageEmployeePage> {
           child: Column(
             children: [
               _textField('First Name', controller.firstNameCtrl),
-              _textField('Middle Name', controller.middleNameCtrl,
-                  required: false),
+              _textField(
+                'Middle Name',
+                controller.middleNameCtrl,
+                required: false,
+              ),
               _textField('Last Name', controller.lastNameCtrl),
               _emailField(),
               if (!widget.isEditMode) _passwordField(),
-              _textField('Phone', controller.phoneCtrl,
-                  type: TextInputType.phone),
+              _textField(
+                'Phone',
+                controller.phoneCtrl,
+                type: TextInputType.phone,
+              ),
               _datePicker(),
               _genderRadio(),
               _dropdown(
@@ -77,8 +88,11 @@ class _ManageEmployeePageState extends State<ManageEmployeePage> {
                 controller.stateId,
                 (v) => setState(() => controller.stateId = v),
               ),
-              _textField('Zipcode', controller.zipcodeCtrl,
-                  type: TextInputType.number),
+              _textField(
+                'Zipcode',
+                controller.zipcodeCtrl,
+                type: TextInputType.number,
+              ),
               const SizedBox(height: 20),
               _actionButtons(),
             ],
@@ -90,8 +104,12 @@ class _ManageEmployeePageState extends State<ManageEmployeePage> {
 
   // ---------------- Widgets ----------------
 
-  Widget _textField(String label, TextEditingController ctrl,
-      {bool required = true, TextInputType type = TextInputType.text}) {
+  Widget _textField(
+    String label,
+    TextEditingController ctrl, {
+    bool required = true,
+    TextInputType type = TextInputType.text,
+  }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: TextFormField(
@@ -146,15 +164,13 @@ class _ManageEmployeePageState extends State<ManageEmployeePage> {
               Radio<String>(
                 value: 'M',
                 groupValue: controller.gender,
-                onChanged: (v) =>
-                    setState(() => controller.gender = v),
+                onChanged: (v) => setState(() => controller.gender = v),
               ),
               const Text('Male'),
               Radio<String>(
                 value: 'F',
                 groupValue: controller.gender,
-                onChanged: (v) =>
-                    setState(() => controller.gender = v),
+                onChanged: (v) => setState(() => controller.gender = v),
               ),
               const Text('Female'),
             ],
@@ -213,7 +229,9 @@ class _ManageEmployeePageState extends State<ManageEmployeePage> {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         TextButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            MainContentController.open(EmployeePage());
+          },
           child: const Text('Cancel'),
         ),
         const SizedBox(width: 12),
@@ -239,14 +257,37 @@ class _ManageEmployeePageState extends State<ManageEmployeePage> {
       employeeId: widget.employeeId,
     );
 
+    final modelforAPI = controller.buildModel(employeeId: widget.employeeId);
+
+    // 🔥 FULL CONSOLE LOG
+    debugPrint('================ EMPLOYEE FORM DATA ================');
+    debugPrint(modelforAPI.toJson().toString());
+    debugPrint(model.toString());
+    debugPrint('====================================================');
+
     if (widget.isEditMode) {
-      // UPDATE API (later)
+      // UPDATE API
       debugPrint('Updating Employee: ${model.employeeId}');
+      // http.post(
+      //   Uri.parse(url),
+      //   body: jsonEncode(model.toJson()),
+      //   headers: {'Content-Type': 'application/json'},
+      // );
     } else {
-      // ADD API (later)
+      // ADD API
       debugPrint('Adding Employee');
+      // http.post(
+      //   Uri.parse(url),
+      //   body: jsonEncode(model.toJson()),
+      //   headers: {'Content-Type': 'application/json'},
+      // );
     }
 
-    Navigator.pop(context);
+    AppSnackBar.show(
+      context,
+      message: 'Employee information updated successfully',
+      type: SnackBarType.success,
+    );
+    MainContentController.open(EmployeePage());
   }
 }
