@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+//import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_application_1/platform_window.dart';
 import 'core/routing/app_routes.dart';
-// import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // Prepares Flutter’s engine before use anything that talks to the platform (OS)
+
+  await initDesktopWindow();
+
   // Load environment variables
   //await dotenv.load(fileName: ".env");
 

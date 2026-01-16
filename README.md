@@ -56,6 +56,15 @@
 
 ✅ This will succeed with no errors.
 
+# Clean & Rebuild plugins
+    > flutter clean
+    > flutter pub get
+
+# Platform = Windows, Regenerate Windows files:
+  Apply following command after doing "Clean & Rebuild plugins" process
+    > flutter create .
+    > flutter run -d windows
+
 # Getting Started
 
 This project is a starting point for a Flutter application.

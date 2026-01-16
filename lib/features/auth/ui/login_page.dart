@@ -21,6 +21,16 @@ class _LoginPageState extends State<LoginPage> {
   String? _errorMessage;
 
   @override
+  void initState() {
+    super.initState();
+    
+    setState(() {
+      _emailController.text = 'bhavin@triveni.com';
+      _passwordController.text = 'bhavin@123';
+    });
+  }
+
+  @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
