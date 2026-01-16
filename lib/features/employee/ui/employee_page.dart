@@ -61,23 +61,16 @@ class EmployeePage extends StatelessWidget {
               child: SingleChildScrollView(
                 child: DataTable(
                   columns: const [
+                    DataColumn(label: Text('Actions')),
                     DataColumn(label: Text('ID')),
                     DataColumn(label: Text('Name')),
                     DataColumn(label: Text('Department')),
                     DataColumn(label: Text('Email')),
                     DataColumn(label: Text('Status')),
-                    DataColumn(label: Text('Actions')),
                   ],
                   rows: employees.map((employee) {
                     return DataRow(
                       cells: [
-                        DataCell(Text('${employee.employeeId}')),
-                        DataCell(
-                          Text('${employee.firstName} ${employee.lastName}'),
-                        ),
-                        DataCell(Text('Department ${employee.departmentId}')),
-                        DataCell(Text(employee.email)),
-                        const DataCell(Text('Active')),
                         DataCell(
                           Row(
                             children: [
@@ -125,6 +118,13 @@ class EmployeePage extends StatelessWidget {
                             ],
                           ),
                         ),
+                        DataCell(Text('${employee.employeeId}')),
+                        DataCell(
+                          Text('${employee.firstName} ${employee.lastName}'),
+                        ),
+                        DataCell(Text('Department ${employee.departmentId}')),
+                        DataCell(Text(employee.email)),
+                        const DataCell(Text('Active')),
                       ],
                     );
                   }).toList(),
@@ -136,4 +136,5 @@ class EmployeePage extends StatelessWidget {
       ),
     );
   }
+  
 }

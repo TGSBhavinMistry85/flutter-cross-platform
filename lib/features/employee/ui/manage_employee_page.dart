@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../shell/logic/main_content_controller.dart';
-import '../logic/mangeEmployee_controller.dart';
+import '../logic/mange_employee_controller.dart';
 import '../model/employee_model.dart';
 
 import 'package:flutter_application_1/features/employee/ui/employee_page.dart';
@@ -31,6 +31,8 @@ class _ManageEmployeePageState extends State<ManageEmployeePage> {
 
     if (widget.isEditMode && widget.employeeId != null) {
       controller.loadForEdit(widget.employeeId!);
+    } else {
+      controller.initForAdd();
     }
   }
 
@@ -42,60 +44,71 @@ class _ManageEmployeePageState extends State<ManageEmployeePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          widget.isEditMode
-              ? 'Update Employee > ${widget.employeeId}'
-              : 'Add Employee',
+    return PopScope(
+      canPop: false, // We handle pop manually
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+
+        final shouldLeave = await _onBackPressed();
+        if (shouldLeave && context.mounted) {
+          Navigator.of(context).pop();
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            widget.isEditMode
+                ? 'Update Employee > ${widget.employeeId}'
+                : 'Add Employee',
+          ),
         ),
-      ),
-      body: Form(
-        key: controller.formKey,
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: [
-              _textField('First Name', controller.firstNameCtrl),
-              _textField(
-                'Middle Name',
-                controller.middleNameCtrl,
-                required: false,
-              ),
-              _textField('Last Name', controller.lastNameCtrl),
-              _emailField(),
-              if (!widget.isEditMode) _passwordField(),
-              _textField(
-                'Phone',
-                controller.phoneCtrl,
-                type: TextInputType.phone,
-              ),
-              _datePicker(),
-              _genderRadio(),
-              _dropdown(
-                'Department',
-                controller.departmentId,
-                (v) => setState(() => controller.departmentId = v),
-              ),
-              _textField('Address', controller.addressCtrl),
-              _dropdown(
-                'Country',
-                controller.countryId,
-                (v) => setState(() => controller.countryId = v),
-              ),
-              _dropdown(
-                'State',
-                controller.stateId,
-                (v) => setState(() => controller.stateId = v),
-              ),
-              _textField(
-                'Zipcode',
-                controller.zipcodeCtrl,
-                type: TextInputType.number,
-              ),
-              const SizedBox(height: 20),
-              _actionButtons(),
-            ],
+        body: Form(
+          key: controller.formKey,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                _textField('First Name', controller.firstNameCtrl),
+                _textField(
+                  'Middle Name',
+                  controller.middleNameCtrl,
+                  required: false,
+                ),
+                _textField('Last Name', controller.lastNameCtrl),
+                _emailField(),
+                if (!widget.isEditMode) _passwordField(),
+                _textField(
+                  'Phone',
+                  controller.phoneCtrl,
+                  type: TextInputType.phone,
+                ),
+                _datePicker(),
+                _genderRadio(),
+                _dropdown(
+                  'Department',
+                  controller.departmentId,
+                  (v) => setState(() => controller.departmentId = v),
+                ),
+                _textField('Address', controller.addressCtrl),
+                _dropdown(
+                  'Country',
+                  controller.countryId,
+                  (v) => setState(() => controller.countryId = v),
+                ),
+                _dropdown(
+                  'State',
+                  controller.stateId,
+                  (v) => setState(() => controller.stateId = v),
+                ),
+                _textField(
+                  'Zipcode',
+                  controller.zipcodeCtrl,
+                  type: TextInputType.number,
+                ),
+                const SizedBox(height: 20),
+                _actionButtons(),
+              ],
+            ),
           ),
         ),
       ),
@@ -212,7 +225,7 @@ class _ManageEmployeePageState extends State<ManageEmployeePage> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: DropdownButtonFormField<int>(
-        value: value,
+        initialValue: value,
         validator: (v) => v == null ? '$label is required' : null,
         decoration: InputDecoration(labelText: label),
         items: const [
@@ -229,8 +242,11 @@ class _ManageEmployeePageState extends State<ManageEmployeePage> {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         TextButton(
-          onPressed: () {
-            MainContentController.open(EmployeePage());
+          onPressed: () async {
+            //final canLeave = await _onBackPressed();
+            //if (canLeave && context.mounted) {
+              MainContentController.open(const EmployeePage());
+            //}
           },
           child: const Text('Cancel'),
         ),
@@ -241,6 +257,32 @@ class _ManageEmployeePageState extends State<ManageEmployeePage> {
         ),
       ],
     );
+  }
+
+  Future<bool> _onBackPressed() async {
+    if (!controller.isDirty) return true;
+
+    final shouldLeave = await showDialog<bool>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Unsaved changes'),
+        content: const Text(
+          'You have unsaved changes. Do you really want to leave?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Stay'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Leave'),
+          ),
+        ],
+      ),
+    );
+
+    return shouldLeave ?? false;
   }
 
   // ---------------- Submit ----------------
@@ -268,6 +310,7 @@ class _ManageEmployeePageState extends State<ManageEmployeePage> {
     if (widget.isEditMode) {
       // UPDATE API
       debugPrint('Updating Employee: ${model.employeeId}');
+      controller.markSaved();
       // http.post(
       //   Uri.parse(url),
       //   body: jsonEncode(model.toJson()),
@@ -276,6 +319,7 @@ class _ManageEmployeePageState extends State<ManageEmployeePage> {
     } else {
       // ADD API
       debugPrint('Adding Employee');
+      controller.markSaved();
       // http.post(
       //   Uri.parse(url),
       //   body: jsonEncode(model.toJson()),

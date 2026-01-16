@@ -11,7 +11,7 @@ class DepartmentPage extends StatefulWidget {
 }
 
 class _DepartmentPageState extends State<DepartmentPage> {
-   @override
+  @override
   void initState() {
     super.initState();
     DepartmentController.loadStats();
@@ -26,10 +26,7 @@ class _DepartmentPageState extends State<DepartmentPage> {
         children: [
           const Text(
             'Departments',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
 
           /// =======================
@@ -110,17 +107,14 @@ class _DepartmentPageState extends State<DepartmentPage> {
               child: SingleChildScrollView(
                 child: DataTable(
                   columns: const [
+                    DataColumn(label: Text('Actions')),
                     DataColumn(label: Text('ID')),
                     DataColumn(label: Text('Department Name')),
                     DataColumn(label: Text('Status')),
-                    DataColumn(label: Text('Actions')),
                   ],
                   rows: List.generate(5, (index) {
                     return DataRow(
                       cells: [
-                        DataCell(Text('${index + 1}')),
-                        DataCell(Text('Department ${index + 1}')),
-                        const DataCell(Text('Active')),
                         DataCell(
                           Row(
                             children: [
@@ -129,12 +123,19 @@ class _DepartmentPageState extends State<DepartmentPage> {
                                 onPressed: () {},
                               ),
                               IconButton(
-                                icon: const Icon(Icons.delete, size: 18),
+                                icon: const Icon(
+                                  Icons.delete,
+                                  size: 18,
+                                  color: Colors.red,
+                                ),
                                 onPressed: () {},
                               ),
                             ],
                           ),
                         ),
+                        DataCell(Text('${index + 1}')),
+                        DataCell(Text('Department ${index + 1}')),
+                        const DataCell(Text('Active')),
                       ],
                     );
                   }),

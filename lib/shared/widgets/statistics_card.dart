@@ -6,7 +6,7 @@ class StatsCard extends StatelessWidget {
   final String title;
   final ValueListenable<HomeStats> statsListenable;
 
-  const StatsCard({
+  const StatsCard({super.key, 
     required this.title,
     required this.statsListenable,
   });
