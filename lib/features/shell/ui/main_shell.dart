@@ -34,7 +34,7 @@ class _MainShellState extends State<MainShell> {
                   child: ValueListenableBuilder<Widget>(
                     valueListenable:
                         MainContentController.currentPage,
-                    builder: (_, page, __) => page,
+                    builder: (_, page, _) => page,
                   ),
                 ),
               ],

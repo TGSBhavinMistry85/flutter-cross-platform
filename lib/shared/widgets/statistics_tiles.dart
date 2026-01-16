@@ -84,7 +84,7 @@ class _StatsTile extends StatelessWidget {
       height: 100,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: tile.color.withOpacity(0.15),
+        color: tile.color.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -93,7 +93,7 @@ class _StatsTile extends StatelessWidget {
             height: 44,
             width: 44,
             decoration: BoxDecoration(
-              color: tile.color.withOpacity(0.25),
+              color: tile.color.withValues(alpha: 0.25),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(

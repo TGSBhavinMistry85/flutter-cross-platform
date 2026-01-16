@@ -4,8 +4,8 @@ import '../../shell/logic/main_content_controller.dart';
 import '../logic/employee_controller.dart';
 import '../model/employee_list_model.dart';
 import 'manage_employee_page.dart';
-import 'package:flutter_application_1/shared/widgets/confirmation_dialog.dart';
-import 'package:flutter_application_1/shared/widgets/app_snackbar.dart';
+import 'package:flutter_application_1/shared/widgets/dialogs/confirmation_dialog.dart';
+import 'package:flutter_application_1/shared/widgets/snackbar/app_snackbar.dart';
 
 class EmployeePage extends StatelessWidget {
   const EmployeePage({super.key});
@@ -136,5 +136,4 @@ class EmployeePage extends StatelessWidget {
       ),
     );
   }
-  
 }

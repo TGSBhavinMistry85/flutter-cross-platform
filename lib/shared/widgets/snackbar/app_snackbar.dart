@@ -140,7 +140,6 @@ class _SnackBarWidget extends StatelessWidget {
       case SnackBarType.error:
         return Colors.red;
       case SnackBarType.info:
-      default:
         return Colors.blue;
     }
   }
@@ -154,7 +153,6 @@ class _SnackBarWidget extends StatelessWidget {
       case SnackBarType.error:
         return Icons.error;
       case SnackBarType.info:
-      default:
         return Icons.info;
     }
   }

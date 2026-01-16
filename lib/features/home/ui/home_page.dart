@@ -3,7 +3,7 @@ import 'package:fl_chart/fl_chart.dart';
 
 import 'package:flutter_application_1/features/home/logic/home_controller.dart';
 import 'package:flutter_application_1/shared/widgets/statistics_card.dart';
-import 'package:flutter_application_1/shared/widgets/color_analysis_linechart.dart';
+import 'package:flutter_application_1/shared/widgets/charts/color_analysis_linechart.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

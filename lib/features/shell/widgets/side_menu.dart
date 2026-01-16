@@ -13,7 +13,7 @@ class SideMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return ValueListenableBuilder<bool>(
       valueListenable: SideMenuController.isOpen,
-      builder: (_, isOpen, __) {
+      builder: (_, isOpen, _) {
         return AnimatedContainer(
           duration: const Duration(milliseconds: 250),
           width: isOpen ? 240 : 72,
@@ -102,7 +102,7 @@ class SideMenu extends StatelessWidget {
   }) {
     return ValueListenableBuilder<int>(
       valueListenable: SideMenuController.selectedIndex,
-      builder: (_, selected, __) {
+      builder: (_, selected, _) {
         final isActive = selected == index;
 
         return InkWell(

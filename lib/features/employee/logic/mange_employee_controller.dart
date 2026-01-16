@@ -23,6 +23,7 @@ class ManageEmployeeController {
 
   List<String> languages = [];
   List<String> hobbies = [];
+  List<String> days = [];
 
   /// Snapshot for dirty check
   ManageEmployeeModel? _initialModel;

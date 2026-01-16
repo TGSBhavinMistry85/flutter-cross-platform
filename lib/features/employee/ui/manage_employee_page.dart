@@ -5,7 +5,7 @@ import '../logic/mange_employee_controller.dart';
 import '../model/employee_model.dart';
 
 import 'package:flutter_application_1/features/employee/ui/employee_page.dart';
-import 'package:flutter_application_1/shared/widgets/app_snackbar.dart';
+import 'package:flutter_application_1/shared/widgets/custom_widgets.dart';
 
 class ManageEmployeePage extends StatefulWidget {
   final bool isEditMode;
@@ -68,43 +68,144 @@ class _ManageEmployeePageState extends State<ManageEmployeePage> {
             padding: const EdgeInsets.all(16),
             child: Column(
               children: [
-                _textField('First Name', controller.firstNameCtrl),
-                _textField(
-                  'Middle Name',
-                  controller.middleNameCtrl,
-                  required: false,
+                AppTextField(
+                  label: 'First Name',
+                  required: true,
+                  controller: controller.firstNameCtrl,
                 ),
-                _textField('Last Name', controller.lastNameCtrl),
-                _emailField(),
-                if (!widget.isEditMode) _passwordField(),
-                _textField(
-                  'Phone',
-                  controller.phoneCtrl,
-                  type: TextInputType.phone,
+                AppTextField(
+                  label: 'Middle Name',
+                  controller: controller.middleNameCtrl,
                 ),
-                _datePicker(),
-                _genderRadio(),
-                _dropdown(
-                  'Department',
-                  controller.departmentId,
-                  (v) => setState(() => controller.departmentId = v),
+                AppTextField(
+                  label: 'Last Name',
+                  required: true,
+                  controller: controller.lastNameCtrl,
                 ),
-                _textField('Address', controller.addressCtrl),
-                _dropdown(
-                  'Country',
-                  controller.countryId,
-                  (v) => setState(() => controller.countryId = v),
+                AppEmailField(
+                  label: 'Email',
+                  readOnly: (widget.isEditMode) ? true : false,
+                  required: (widget.isEditMode) ? true : true,
+                  controller: controller.emailCtrl,
                 ),
-                _dropdown(
-                  'State',
-                  controller.stateId,
-                  (v) => setState(() => controller.stateId = v),
+
+                // if (!widget.isEditMode) AppPasswordField(controller: null),
+                AppPhoneField(
+                  //label: 'Phone',
+                  //required: true,
+                  controller: controller.phoneCtrl,
                 ),
-                _textField(
-                  'Zipcode',
-                  controller.zipcodeCtrl,
-                  type: TextInputType.number,
+
+                AppDateField(
+                  label: 'Date of Birth',
+                  required: true,
+                  value: controller.dob,
+                  onChanged: (date) {
+                    setState(() {
+                      controller.dob = date;
+                    });
+                  },
                 ),
+
+                AppRadioGroup<String>(
+                  label: 'Gender',
+                  required: true,
+                  value: controller.gender,
+                  options: [
+                    AppRadioOption(value: 'M', label: 'Male'),
+                    AppRadioOption(value: 'F', label: 'Female'),
+                  ],
+                  onChanged: (v) => setState(() => controller.gender = v),
+                ),
+
+                AppDropdown<BigInt>(
+                  label: 'Department',
+                  required: true,
+                  value: controller.departmentId == null
+                      ? null
+                      : BigInt.from(controller.departmentId!),
+                  items: [
+                    AppDropdownOption(value: BigInt.from(1), label: 'Dept 1'),
+                    AppDropdownOption(value: BigInt.from(2), label: 'Dept 2'),
+                  ],
+                  onChanged: (v) =>
+                      setState(() => controller.departmentId = v?.toInt()),
+                ),
+
+                AppTextField(
+                  label: 'Address',
+                  required: true,
+                  controller: controller.addressCtrl,
+                ),
+
+                AppDropdown<BigInt>(
+                  label: 'Country',
+                  required: true,
+                  value: controller.countryId == null
+                      ? null
+                      : BigInt.from(controller.countryId!),
+                  items: [
+                    AppDropdownOption(value: BigInt.from(1), label: 'India'),
+                    AppDropdownOption(value: BigInt.from(2), label: 'USA'),
+                  ],
+                  onChanged: (v) =>
+                      setState(() => controller.countryId = v?.toInt()),
+                ),
+
+                AppDropdown<BigInt>(
+                  label: 'State',
+                  required: true,
+                  value: controller.stateId == null
+                      ? null
+                      : BigInt.from(controller.stateId!),
+                  items: [
+                    AppDropdownOption(value: BigInt.from(1), label: 'Gujarat'),
+                    AppDropdownOption(value: BigInt.from(2), label: 'Goa'),
+                  ],
+                  onChanged: (v) =>
+                      setState(() => controller.stateId = v?.toInt()),
+                ),
+
+                AppTextField(
+                  label: 'Zipcode',
+                  controller: controller.zipcodeCtrl,
+                ),
+
+                AppMultiSelect<String>(
+                  label: 'Languages',
+                  required: true,
+                  values: controller.languages,
+                  options: const [
+                    AppMultiSelectOption(value: 'English', label: 'English'),
+                    AppMultiSelectOption(value: 'Hindi', label: 'Hindi'),
+                    AppMultiSelectOption(value: 'Gujarati', label: 'Gujarati'),
+                  ],
+                  onChanged: (v) => setState(() => controller.languages = v),
+                ),
+
+                AppCheckboxGroup<String>(
+                  label: 'Hobbies',
+                  values: controller.hobbies,
+                  options: const [
+                    AppCheckboxOption(value: 'Reading', label: 'Reading'),
+                    AppCheckboxOption(value: 'Cricket', label: 'Cricket'),
+                    AppCheckboxOption(value: 'Music', label: 'Music'),
+                  ],
+                  onChanged: (v) => setState(() => controller.hobbies = v),
+                ),
+
+                AppCheckboxGroup<String>(
+                  label: 'Working Days',
+                  direction: Axis.horizontal,
+                  values: controller.days,
+                  options: const [
+                    AppCheckboxOption(value: 'Mon', label: 'Mon'),
+                    AppCheckboxOption(value: 'Tue', label: 'Tue'),
+                    AppCheckboxOption(value: 'Wed', label: 'Wed'),
+                  ],
+                  onChanged: (v) => setState(() => controller.days = v),
+                ),
+
                 const SizedBox(height: 20),
                 _actionButtons(),
               ],
@@ -117,126 +218,6 @@ class _ManageEmployeePageState extends State<ManageEmployeePage> {
 
   // ---------------- Widgets ----------------
 
-  Widget _textField(
-    String label,
-    TextEditingController ctrl, {
-    bool required = true,
-    TextInputType type = TextInputType.text,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: TextFormField(
-        controller: ctrl,
-        keyboardType: type,
-        validator: (v) =>
-            required && (v == null || v.isEmpty) ? '$label is required' : null,
-        decoration: InputDecoration(labelText: label),
-      ),
-    );
-  }
-
-  Widget _emailField() {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: TextFormField(
-        controller: controller.emailCtrl,
-        validator: (v) {
-          if (v == null || v.isEmpty) return 'Email is required';
-          if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(v)) {
-            return 'Enter valid email';
-          }
-          return null;
-        },
-        decoration: const InputDecoration(labelText: 'Email'),
-      ),
-    );
-  }
-
-  Widget _passwordField() {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: TextFormField(
-        //controller: controller.passwordCtrl,
-        obscureText: true,
-        validator: (v) =>
-            v == null || v.length < 6 ? 'Minimum 6 characters' : null,
-        decoration: const InputDecoration(labelText: 'Password'),
-      ),
-    );
-  }
-
-  Widget _genderRadio() {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text('Gender'),
-          Row(
-            children: [
-              Radio<String>(
-                value: 'M',
-                groupValue: controller.gender,
-                onChanged: (v) => setState(() => controller.gender = v),
-              ),
-              const Text('Male'),
-              Radio<String>(
-                value: 'F',
-                groupValue: controller.gender,
-                onChanged: (v) => setState(() => controller.gender = v),
-              ),
-              const Text('Female'),
-            ],
-          ),
-          if (controller.gender == null)
-            const Text(
-              'Gender is required',
-              style: TextStyle(color: Colors.red),
-            ),
-        ],
-      ),
-    );
-  }
-
-  Widget _datePicker() {
-    return ListTile(
-      contentPadding: EdgeInsets.zero,
-      title: Text(
-        controller.dob == null
-            ? 'Select Date of Birth'
-            : controller.dob!.toString().split(' ')[0],
-      ),
-      trailing: const Icon(Icons.calendar_today),
-      onTap: () async {
-        final date = await showDatePicker(
-          context: context,
-          firstDate: DateTime(1900),
-          lastDate: DateTime.now(),
-          initialDate: controller.dob ?? DateTime.now(),
-        );
-        if (date != null) {
-          setState(() => controller.dob = date);
-        }
-      },
-    );
-  }
-
-  Widget _dropdown(String label, int? value, ValueChanged<int?> onChanged) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: DropdownButtonFormField<int>(
-        initialValue: value,
-        validator: (v) => v == null ? '$label is required' : null,
-        decoration: InputDecoration(labelText: label),
-        items: const [
-          DropdownMenuItem(value: 1, child: Text('Option 1')),
-          DropdownMenuItem(value: 2, child: Text('Option 2')),
-        ],
-        onChanged: onChanged,
-      ),
-    );
-  }
-
   Widget _actionButtons() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -245,7 +226,7 @@ class _ManageEmployeePageState extends State<ManageEmployeePage> {
           onPressed: () async {
             //final canLeave = await _onBackPressed();
             //if (canLeave && context.mounted) {
-              MainContentController.open(const EmployeePage());
+            MainContentController.open(const EmployeePage());
             //}
           },
           child: const Text('Cancel'),

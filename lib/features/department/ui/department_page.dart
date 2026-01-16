@@ -36,7 +36,7 @@ class _DepartmentPageState extends State<DepartmentPage> {
             width: double.infinity,
             child: ValueListenableBuilder(
               valueListenable: DepartmentController.departmentStats,
-              builder: (_, deptStats, __) {
+              builder: (_, deptStats, _) {
                 return StatisticsTiles(
                   tiles: [
                     StatsTileModel(

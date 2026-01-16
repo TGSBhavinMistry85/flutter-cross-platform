@@ -19,7 +19,7 @@ class StatsCard extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: ValueListenableBuilder<HomeStats>(
           valueListenable: statsListenable,
-          builder: (_, stats, __) {
+          builder: (_, stats, _) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
