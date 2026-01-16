@@ -68,62 +68,90 @@ class _ManageEmployeePageState extends State<ManageEmployeePage> {
             padding: const EdgeInsets.all(16),
             child: Column(
               children: [
-                AppTextField(
-                  label: 'First Name',
-                  required: true,
-                  controller: controller.firstNameCtrl,
-                ),
-                AppTextField(
-                  label: 'Middle Name',
-                  controller: controller.middleNameCtrl,
-                ),
-                AppTextField(
-                  label: 'Last Name',
-                  required: true,
-                  controller: controller.lastNameCtrl,
-                ),
-                AppEmailField(
-                  label: 'Email',
-                  readOnly: (widget.isEditMode) ? true : false,
-                  required: (widget.isEditMode) ? true : true,
-                  controller: controller.emailCtrl,
-                ),
-
-                // if (!widget.isEditMode) AppPasswordField(controller: null),
-                AppPhoneField(
-                  //label: 'Phone',
-                  //required: true,
-                  controller: controller.phoneCtrl,
-                ),
-
-                AppDateField(
-                  label: 'Date of Birth',
-                  required: true,
-                  value: controller.dob,
-                  onChanged: (date) {
-                    setState(() {
-                      controller.dob = date;
-                    });
-                  },
-                ),
-
-                AppRadioGroup<String>(
-                  label: 'Gender',
-                  required: true,
-                  value: controller.gender,
-                  options: [
-                    AppRadioOption(value: 'M', label: 'Male'),
-                    AppRadioOption(value: 'F', label: 'Female'),
+                // ---------- Row 1: First Name, Middle Name, Last Name ----------
+                Row(
+                  children: [
+                    Expanded(
+                      child: AppTextField(
+                        label: 'First Name',
+                        required: true,
+                        controller: controller.firstNameCtrl,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: AppTextField(
+                        label: 'Middle Name',
+                        controller: controller.middleNameCtrl,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: AppTextField(
+                        label: 'Last Name',
+                        required: true,
+                        controller: controller.lastNameCtrl,
+                      ),
+                    ),
                   ],
-                  onChanged: (v) => setState(() => controller.gender = v),
                 ),
+                const SizedBox(height: 12),
 
+                // ---------- Row 2: Email and Phone ----------
+                Row(
+                  children: [
+                    Expanded(
+                      child: AppEmailField(
+                        label: 'Email',
+                        readOnly: widget.isEditMode,
+                        required: true,
+                        controller: controller.emailCtrl,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: AppPhoneField(controller: controller.phoneCtrl),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+
+                // ---------- Row 3: Date of Birth and Gender ----------
+                Row(
+                  children: [
+                    Expanded(
+                      child: AppDateField(
+                        label: 'Date of Birth',
+                        required: true,
+                        value: controller.dob,
+                        onChanged: (date) =>
+                            setState(() => controller.dob = date),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: AppRadioGroup<String>(
+                        label: 'Gender',
+                        required: true,
+                        value: controller.gender,
+                        options: [
+                          AppRadioOption(value: 'M', label: 'Male'),
+                          AppRadioOption(value: 'F', label: 'Female'),
+                        ],
+                        onChanged: (v) => setState(() => controller.gender = v),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+
+                // ---------- Row 4: Department ----------
                 AppDropdown<BigInt>(
                   label: 'Department',
                   required: true,
-                  value: controller.departmentId == null
-                      ? null
-                      : BigInt.from(controller.departmentId!),
+                  value: controller.departmentId != null
+                      ? BigInt.from(controller.departmentId!)
+                      : null,
                   items: [
                     AppDropdownOption(value: BigInt.from(1), label: 'Dept 1'),
                     AppDropdownOption(value: BigInt.from(2), label: 'Dept 2'),
@@ -131,79 +159,125 @@ class _ManageEmployeePageState extends State<ManageEmployeePage> {
                   onChanged: (v) =>
                       setState(() => controller.departmentId = v?.toInt()),
                 ),
+                const SizedBox(height: 12),
 
+                // ---------- Row 5: Address ----------
                 AppTextField(
                   label: 'Address',
                   required: true,
                   controller: controller.addressCtrl,
                 ),
+                const SizedBox(height: 12),
 
-                AppDropdown<BigInt>(
-                  label: 'Country',
-                  required: true,
-                  value: controller.countryId == null
-                      ? null
-                      : BigInt.from(controller.countryId!),
-                  items: [
-                    AppDropdownOption(value: BigInt.from(1), label: 'India'),
-                    AppDropdownOption(value: BigInt.from(2), label: 'USA'),
+                // ---------- Row 6: Country, State, Zipcode ----------
+                Row(
+                  children: [
+                    Expanded(
+                      child: AppDropdown<BigInt>(
+                        label: 'Country',
+                        required: true,
+                        value: controller.countryId != null
+                            ? BigInt.from(controller.countryId!)
+                            : null,
+                        items: [
+                          AppDropdownOption(
+                            value: BigInt.from(1),
+                            label: 'India',
+                          ),
+                          AppDropdownOption(
+                            value: BigInt.from(2),
+                            label: 'USA',
+                          ),
+                        ],
+                        onChanged: (v) =>
+                            setState(() => controller.countryId = v?.toInt()),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: AppDropdown<BigInt>(
+                        label: 'State',
+                        required: true,
+                        value: controller.stateId != null
+                            ? BigInt.from(controller.stateId!)
+                            : null,
+                        items: [
+                          AppDropdownOption(
+                            value: BigInt.from(1),
+                            label: 'Gujarat',
+                          ),
+                          AppDropdownOption(
+                            value: BigInt.from(2),
+                            label: 'Goa',
+                          ),
+                        ],
+                        onChanged: (v) =>
+                            setState(() => controller.stateId = v?.toInt()),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: AppTextField(
+                        label: 'Zipcode',
+                        controller: controller.zipcodeCtrl,
+                      ),
+                    ),
                   ],
-                  onChanged: (v) =>
-                      setState(() => controller.countryId = v?.toInt()),
                 ),
+                const SizedBox(height: 12),
 
-                AppDropdown<BigInt>(
-                  label: 'State',
-                  required: true,
-                  value: controller.stateId == null
-                      ? null
-                      : BigInt.from(controller.stateId!),
-                  items: [
-                    AppDropdownOption(value: BigInt.from(1), label: 'Gujarat'),
-                    AppDropdownOption(value: BigInt.from(2), label: 'Goa'),
+                // ---------- Row 7: Languages, Hobbies, Working Days ----------
+                Row(
+                  children: [
+                    Expanded(
+                      child: AppMultiSelect<String>(
+                        label: 'Languages',
+                        required: true,
+                        values: controller.languages,
+                        options: [
+                          AppMultiSelectOption(
+                            value: 'English',
+                            label: 'English',
+                          ),
+                          AppMultiSelectOption(value: 'Hindi', label: 'Hindi'),
+                          AppMultiSelectOption(
+                            value: 'Gujarati',
+                            label: 'Gujarati',
+                          ),
+                        ],
+                        onChanged: (v) =>
+                            setState(() => controller.languages = v),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: AppCheckboxGroup<String>(
+                        label: 'Hobbies',
+                        values: controller.hobbies,
+                        options: [
+                          AppCheckboxOption(value: 'Reading', label: 'Reading'),
+                          AppCheckboxOption(value: 'Cricket', label: 'Cricket'),
+                          AppCheckboxOption(value: 'Music', label: 'Music'),
+                        ],
+                        onChanged: (v) =>
+                            setState(() => controller.hobbies = v),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: AppCheckboxGroup<String>(
+                        label: 'Working Days',
+                        direction: Axis.horizontal,
+                        values: controller.days,
+                        options: const [
+                          AppCheckboxOption(value: 'Mon', label: 'Mon'),
+                          AppCheckboxOption(value: 'Tue', label: 'Tue'),
+                          AppCheckboxOption(value: 'Wed', label: 'Wed'),
+                        ],
+                        onChanged: (v) => setState(() => controller.days = v),
+                      ),
+                    ),
                   ],
-                  onChanged: (v) =>
-                      setState(() => controller.stateId = v?.toInt()),
-                ),
-
-                AppTextField(
-                  label: 'Zipcode',
-                  controller: controller.zipcodeCtrl,
-                ),
-
-                AppMultiSelect<String>(
-                  label: 'Languages',
-                  required: true,
-                  values: controller.languages,
-                  options: const [
-                    AppMultiSelectOption(value: 'English', label: 'English'),
-                    AppMultiSelectOption(value: 'Hindi', label: 'Hindi'),
-                    AppMultiSelectOption(value: 'Gujarati', label: 'Gujarati'),
-                  ],
-                  onChanged: (v) => setState(() => controller.languages = v),
-                ),
-
-                AppCheckboxGroup<String>(
-                  label: 'Hobbies',
-                  values: controller.hobbies,
-                  options: const [
-                    AppCheckboxOption(value: 'Reading', label: 'Reading'),
-                    AppCheckboxOption(value: 'Cricket', label: 'Cricket'),
-                    AppCheckboxOption(value: 'Music', label: 'Music'),
-                  ],
-                  onChanged: (v) => setState(() => controller.hobbies = v),
-                ),
-
-                AppCheckboxGroup<String>(
-                  label: 'Working Days',
-                  direction: Axis.horizontal,
-                  values: controller.days,
-                  options: const [
-                    AppCheckboxOption(value: 'Mon', label: 'Mon'),
-                    AppCheckboxOption(value: 'Tue', label: 'Tue'),
-                    AppCheckboxOption(value: 'Wed', label: 'Wed'),
-                  ],
-                  onChanged: (v) => setState(() => controller.days = v),
                 ),
 
                 const SizedBox(height: 20),
