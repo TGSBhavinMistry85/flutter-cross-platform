@@ -4,16 +4,25 @@ import '../../shell/logic/main_content_controller.dart';
 import '../logic/employee_controller.dart';
 import '../model/employee_list_model.dart';
 import 'manage_employee_page.dart';
-import 'package:flutter_application_1/shared/widgets/dialogs/confirmation_dialog.dart';
-import 'package:flutter_application_1/shared/widgets/snackbar/app_snackbar.dart';
 
-class EmployeePage extends StatelessWidget {
+class EmployeePage extends StatefulWidget {
   const EmployeePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final List<EmployeeModel> employees = EmployeeController.getEmployees();
+  State<EmployeePage> createState() => _EmployeePageState();
+}
 
+class _EmployeePageState extends State<EmployeePage> {
+  late List<EmployeeModel> employees;
+
+  @override
+  void initState() {
+    super.initState();
+    employees = EmployeeController.getEmployees();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -93,26 +102,17 @@ class EmployeePage extends StatelessWidget {
                                 ),
                                 tooltip: 'Delete',
                                 onPressed: () async {
-                                  final confirmed = await ConfirmDialog.show(
-                                    context: context,
-                                    title: 'Delete Employee',
-                                    message:
-                                        'Are you sure you want to delete ${employee.firstName} ${employee.lastName}?',
-                                    confirmText: 'Delete',
+                                  // Call controller to handle deletion & snackbar
+                                  await EmployeeController.deleteEmployee(
+                                    context,
+                                    employee,
                                   );
 
-                                  if (confirmed == true) {
-                                    // SOFT DELETE LOGIC (later API)
-                                    debugPrint(
-                                      'Soft deleted employee ${employee.employeeId}',
-                                    );
-                                    AppSnackBar.show(
-                                      context,
-                                      message:
-                                          'Employee ${employee.firstName} ${employee.lastName} deleted successfully',
-                                      type: SnackBarType.success,
-                                    );
-                                  }
+                                  // Optional: remove employee from list locally
+                                  if (!mounted) return;
+                                  setState(() {
+                                    employees.remove(employee);
+                                  });
                                 },
                               ),
                             ],
