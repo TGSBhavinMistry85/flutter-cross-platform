@@ -23,6 +23,32 @@ MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs/2rCzeyLR261J1lP7tZOR1vaNqiG1EFMZIn
 
       final license = jsonDecode(jsonString);
 
+      // Payload MUST match backend signing
+      final payload =
+          '${license['licenseId']}|'
+          '${license['fingerprintHash']}|'
+          '${license['issuedAt']}|'
+          '${license['expiresAt']}';
+
+      // Verify signature
+      final isValid = _verifySignature(
+        payload,
+        license['signature'],
+        _publicKeyPem,
+      );
+
+      if (!isValid) {
+        print('Invalid license signature');
+        return isValid;
+      }
+
+      // Expiry check
+      final expiry = DateTime.parse(license['expiresAt']);
+      if (DateTime.now().isAfter(expiry)) {
+        print('License expired');
+        return false;
+      }
+
       // Hardware fingerprint check
       final currentFingerprint = (await HardwareProvider.getFingerprint())
           .trim()
@@ -38,30 +64,9 @@ MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs/2rCzeyLR261J1lP7tZOR1vaNqiG1EFMZIn
         return false;
       }
 
-      // Expiry check
-      final expiry = DateTime.parse(license['expiresAt']);
-      if (DateTime.now().isAfter(expiry)) {
-        print('License expired');
-        return false;
-      }
-
-      // Payload MUST match backend signing
-      final payload =
-          '${license['licenseId']}|'
-          '${license['fingerprintHash']}|'
-          '${license['issuedAt']}|'
-          '${license['expiresAt']}';
-
-      // Verify signature
-      final isValid = _verifySignature(
-        payload,
-        license['signature'],
-        _publicKeyPem,
-      );
-
       return isValid;
     } catch (e, st) {
-      print('License validation error: $e , stack crash: $st' );
+      print('License validation error: $e , stack crash: $st');
       return false;
     }
   }
