@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 //import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_application_1/platform_window.dart';
+import 'package:flutter_application_1/license-validator/license_validator.dart';
 import 'core/routing/app_routes.dart';
 
 void main() async {
@@ -11,7 +12,16 @@ void main() async {
   // Load environment variables
   //await dotenv.load(fileName: ".env");
 
-  runApp(const MyApp());
+  bool valid = await LicenseValidator.isLicenseValid();
+  if (!valid) {
+    runApp(const MaterialApp(
+      home: Scaffold(
+        body: Center(child: Text("Invalid License. Application is locked.")),
+      ),
+    ));
+  } else {
+    runApp(const MyApp());
+  }
 }
 
 class MyApp extends StatelessWidget {

@@ -1,0 +1,13 @@
+{
+  "licenseId": "b1af40c8cab948058e22da68f6796fad",
+  "customerId": "Bhavin-001",
+  "productCode": null,
+  "fingerprintHash": "3543BC73E2400CE2025FAC120C612CAC9618922203D9BD005DCB24C9491474A7",
+  "issuedAt": "2026-01-22T06:08:41.6237661Z",
+  "expiresAt": "2027-01-22T06:08:41.6321529Z",
+  "status": "Active",
+  "maxActivations": 1,
+  "activationCount": 1,
+  "fingerprintVersion": "v1",
+  "signature": "HIuX3NjSF6+MbgH0EwtJ7TIH35/dqXkc82KUvXb702IaHDsw5OgKbfjq2rviu6Wfdm4qr4Yj3k7uTt1+XLMHIcdFzIGxekhDxx8IigtE9J6q8veWBM0iEmES1q5e0b4qyONDgVwXB4z15RsNjMLC7nLOXrpdbq8JDFj9Kb/I0k9c7EkNqjNkYe3LdISz6fQTCSv1EwN8LcV6LZbbLJIRnNfT4o3/yo4Eooj/ho53a/dA3fu2NPQjMS4lCgIP7tuINySyOK1CRZDdcKKX3M+geYiR+gckjIv/WjGZAJS20O1sIpDUSUQSqoHW7oHqUqTnO7XgaEmhhS3+a5QT8fAGTg=="
+}
